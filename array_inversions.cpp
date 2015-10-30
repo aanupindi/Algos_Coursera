@@ -1,12 +1,15 @@
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <sstream>
+#include <stdint.h>
 
-int merge(std::vector<int>& a, int mid, int low, int high)
+uint64_t merge(std::vector<int>& a, int mid, int low, int high)
 {
 	std::vector<int> sorted;
 	int i , j;
 	i = low;j = mid+1;
-	int inv = 0;
+	uint64_t inv = 0;
 
 	while(i <= mid && j <= high)
 	{
@@ -44,9 +47,9 @@ int merge(std::vector<int>& a, int mid, int low, int high)
 	return  inv;
 }
 
-int mergeSort(std::vector<int>& a, int low, int high)
+uint64_t mergeSort(std::vector<int>& a, int low, int high)
 {
-	int x,y,z;
+	uint64_t x,y,z;
 	x=y=z=0;	
 	if(low < high)
 	{
@@ -57,27 +60,39 @@ int mergeSort(std::vector<int>& a, int low, int high)
 	}
 	return (x+y+z);
 }
-int main()
+
+void populateVector(std::string filename,std::vector<int>& inputVector)
 {
-	
-	//int myInts[] = {1,20,6,4,5};
-	std::cout<<"Input length"<<std::endl;
-	int arrayLen;
-	std::cin>>arrayLen;
-	std::cout<<"Input array"<<std::endl;
-	std::vector<int> a;
-	for (int i = 0; i < arrayLen; i++) {
-    int b;
-    std::cin >> b;
-    a.push_back(b);
+	std::ifstream inputFile;
+	std::string line;
+	inputFile.open(filename.c_str());
+	if(inputFile.is_open())
+	{
+		while(getline(inputFile,line))
+		{
+			std::stringstream ss(line);
+			int value;
+			ss >> value;
+			inputVector.push_back(value);
+		}
+	}
+	inputFile.close();
 }
 
-	//std::vector<int> a(myInts, myInts + sizeof(myInts) / sizeof(int));
-	int inv = mergeSort(a,0,a.size()-1);
-	for(std::vector<int>::size_type i = 0; i != a.size(); i++) 
+int main(int argv, char** argc)
+{
+	if(argv  < 2)
 	{
-     	std::cout<< a[i]<<std::endl;
+		std::cout<<"Please enter input array filename"<<std::endl;
+		return 0;
 	}
+	std::string arrayFilename = argc[1];
+
+	std::vector<int> a;
+	populateVector(arrayFilename,a);
+
+	uint64_t inv = mergeSort(a,0,a.size()-1);
+
 	std::cout<<"number of inversions are "<<inv<<std::endl;
 	std::cout<<"hello,world"<<std::endl;
 	return 0;
