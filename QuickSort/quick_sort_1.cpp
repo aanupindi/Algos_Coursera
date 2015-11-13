@@ -7,6 +7,7 @@
 #include <stdint.h>
 #include "quick_sort.h"
 
+
 quick_sort::quick_sort() 
 {	
 }
@@ -33,12 +34,20 @@ void quick_sort::populateVector(std::string filename,std::vector<int>& inputVect
 	inputFile.close();
 }
 
+void quick_sort::printArray(std::vector<int> v)
+{
+	for (int i = 0; i < v.size(); ++i)
+	{
+		std::cout<<v[i]<<std::endl;	
+	}
+}
+
 void quick_sort::quicksort(std::vector<int> &a,int l, int r)
 {
 	if ((r - l) > 0)
 	{
 	int pivot = partition(a,l,r); // left and right separated.
-	quicksort(a,l,pivot);
+	quicksort(a,l,pivot-1);
 	quicksort(a,pivot+1,r);
 	}
 }

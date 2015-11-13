@@ -18,4 +18,5 @@ public:
 	void swap(std::vector<int> &a,int j, int i);
 	uint64_t getComparisons();
 	void setComparisons(uint64_t);
+	void printArray(std::vector<int> v);
 };

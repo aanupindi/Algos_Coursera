@@ -3,12 +3,20 @@
 
 int main(int argc, char **argv)
 {
-	if(argc  < 2)
+	if(argc  < 3)
 	{
-		std::cout<<"Please enter input array filename"<<std::endl;
+		std::cout<<"Usage: ./quicksort <input_filename> <pivot_position>"<<std::endl;
 		return 0;
 	}
-	quick_sort qs;
+	if (argv[2] == "first")
+	{
+		quick_sort qs;
+	}
+	else
+	{
+		quick_sort_2 qs;
+	}
+	//quick_sort qs;
 
 	std::string arrayFilename = argv[1];
 
@@ -17,11 +25,13 @@ int main(int argc, char **argv)
 	//partition(a,0,a.size()-1);
 	qs.quicksort(a,0,a.size()-1);
 
-	std::cout<<qs.getComparisons()<<std::endl;
-
 	// for (int i = 0; i < a.size(); ++i)
 	// {
-	// 	std::cout<<a[i]<<std::endl;
+	// 	std::cout<<a[i]<<std::endl;	
 	// }
+	std::cout<<"Output is "<<std::endl;
+	qs.printArray(a);
+
+	std::cout<<"Number of comparisons are "<<qs.getComparisons()<<std::endl;
 	
 }
