@@ -1,0 +1,28 @@
+Notes:
+
+Robin Karp Algorithm is used to calculate the hash of strings to help in pattern matching and detecting duplicates.
+
+string s, string pattern.
+1. Create a hash for the pattern string.
+2. Starting at index 0 of string s, create a hash for the length of pattern and check if hash_s == hash_pattern.
+3. if the hash_s == hash_pattern, then check if the strings are actually equal.
+
+Hash Algorithm -> Choose a base number. ex: 101 
+                    Reduce the characters to their ASCII values.
+                Hash = Sum of {101 ^ ( length of string - i) * ASCII(char)}
+
+This will produce a large number and if each string needs to be added into a hashtable, the value of the hash needs to be reduced by a modulo of the len 
+of the hash table.
+
+-> Problem to solve product of all members of an array excluding itself
+	It can be solved in 2*O(n) by calculating the product of all the members before i in one processing step and the product of all the members after it 
+	in the second processing step. 
+
+
+ASSERT -> useful method for debbuging during development.
+	assert(val) -> if val == 0, this will print an error message on standard output and abort the program.
+
+Header needed: #include <assert.h>
+If the macro #NDEBUG is defined, then the assert will be a NO-OP. This will be helpful when converting debug code to non-debug/release code.
+
+
