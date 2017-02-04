@@ -25,4 +25,105 @@ ASSERT -> useful method for debbuging during development.
 Header needed: #include <assert.h>
 If the macro #NDEBUG is defined, then the assert will be a NO-OP. This will be helpful when converting debug code to non-debug/release code.
 
+SORTING:
+
+Selection sort is basically
+for all in the array:
+	find the min of the array,
+	swap with current iterator element.
+
+This takes n^2 time since the task of finding the min element is O(n) and then this has to be done for n elements.
+
+This can be improved by using a better data structure that provides us with the minimum element faster.
+
+Heap can be used for this. HeapSort is basically Selection Sort with Heap data structure.
+
+HEAPS: efficient data structures used to obtain priority queue operations like insert, min and delete.
+The difference between  the HEAP data structure and the Binary Search Tree is that the position of the children of each doesn't have to
+be maintained using separate pointers. This pointer technique can become very cumbersome.
+Heaps are structures that represent binary trees without any pointers.
+Data is stored as an array of keys and the position of each node is implictly deduced from the index of the array.
+
+struct{
+	
+	item_type t[queue_size]; //queue with capacity queue_size
+	int n;					// number of elements in the queue.
+}heap;
+
+for any root element k,
+left child = 2k
+right child = 2k + 1
+parent of k = k/2
+
+Heaps are used mainly to maintain some sort of dominance order in the array. This could be 
+min heap - each parent node is lesser than it's children
+max heap - each parent node is greater than it's children
+
+Addition or removal of any key automatically should reorder the elements in order to retain the dominance relationship.
+The relationship could be anything apart from min and max.
+relationship = use the symbol ^
+
+HEAP INSERTION:
+
+A new key has to be added to the end of the array. 
+From this,
+ if (new_element ^ parent) swap them.
+ Do this until the new_element no longer ^ it's parent.
+
+This step takes number of elements to skip at most * time to skip each level = nlogn time complexity and constant space complexity.
+
+HEAP DELETE TOP ELEMENT:
+
+Deleting/extracting the dominant element in the heap is easy since it's the topmost element. Now, when this element is deleted, 
+there is a hole in that spot and has to be filled by another element.
+Fill the top element by bringing in the right-most element in the array.
+Now, check for dominance relationship of the top element with the top+1 and top+2 elements and bubble the element down 
+to the index where it no longer is dominated by it's child.
+
+HEAPSORT:
+
+Take in an array of items.
+Make Heap by calling the insertion technique on the array item by item. This way we can sort items based on any possible merit.
+ascending, descending, any heirarchy based on the requirement of the items present in the heap.
+
+for ex: Can create a heap based on the # of patents acquired by each person in a team. 
+
+class member
+{
+	private:
+	string name;
+	int age;
+	string position;
+	int numPatents;
+
+	public:
+	int GetPatents();
+	int SetPatent(int numPatent);
+};
+
+
+struct {
+	
+	member team[team_size];
+	int numMembers;
+
+	void make_heap(member m)
+	member removeTop();
+}patent_queue;
+
+make_heap() would look at the member.numPatents to decide what position it would add the person into the heap DS.
+removeTop() would remove the top performing person from the heap and replace with the next top performer.
+
+HeapSort is simple to program and takes nlogn for each operation. 
+It is in-place and does not need any extra space.
+Cannot go wrong with heapsort.
+
+Optimizing heap creation:
+
+
+
+
+
+
+
 
