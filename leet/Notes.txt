@@ -314,6 +314,16 @@ If the And has to be zero, b has to be 00 1/0 1/0 so two bits can be different. 
 
 So the answer is 2^(unset_bits_in_Num)
 
+Interview Note:
+
+for a set of integers : find the XOR of all contiguous sub arrays.
+
+for an even sized array, it turns out that all the integers cancel each other.
+
+for an odd sized array, only the even-indexed items are needed to be XOR'd.
+
+Seems more like a trick question to see if the person actually calculates all the possible sub arrays.
+
 
 
 
