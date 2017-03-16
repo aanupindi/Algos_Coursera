@@ -1,5 +1,18 @@
 Notes:
 
+Logic behind hashing:
+
+It's easy to insert and search for elements in an array if we know where to look. In the sense, what index to look at.
+So hashing is to take the value that we need to insert/search for and convert that into our index as well.
+This serves 2 purposes - We know where to insert this value AND we know where to look for it.
+The whole idea is to conver the value into the index.
+
+InsertIntoHashTable(int value)
+{
+	int index = ConvertThisValueIntoAnIndex(value); //This is the hashing function
+	
+	InsertAtIndex(index, value);
+}
 Robin Karp Algorithm is used to calculate the hash of strings to help in pattern matching and detecting duplicates.
 
 string s, string pattern.
@@ -120,6 +133,186 @@ Cannot go wrong with heapsort.
 
 Optimizing heap creation:
 
+Insert all the elements in an array in unsorted order.
+Starting from the end, Call bubble_down() on the array.
+This should finish the heap creation in O(nlogn) time.
+
+Quick Sort: 
+
+1. Choose a pivot( could be random best results or the last element of the array) 
+2. Now partition the array into elements less than and greater than that pivot.
+3. Now ideally we should have divided the array somewhat equally. The array has two separate and lesser sub arrays.
+4. Repeat steps 1-3 on the sub arrays.
+
+The worst case for Quick sort is quadratic. This happens if the pivot is chosen such that the array is not divided into sub arrays at all.
+At this point we are calling the quick sort which is a O(n) operation n times.
+To better this, it is important to choose a random array element since this decrease the chances of the array not being halved.
+
+Bucket Sort:
+
+This divides the array into buckets based on a certain characteristic.
+Now all the buckets are self contained unsorted arrays.
+We can recursively sort the buckets again.
+This is useful in the case where there are equal number of items in each bucket.
+
+Interview Question Note: O(n) Sorting in an array with elements b/w 1 and N when the array size is N.
+
+Basically the array contains N elements and the VALUE of those elements is also between 1 and N.
+
+So the value of the elements is contained within the indices of the array.
+
+Idea: Put the elements in the place indicated by the indices. so element 6 goes to index = 5 (since the indices are between 0 and N-1)
+
+for(i = 0 to the end of the array)
+{
+	if(array[i] != array[array[i]-1])	 //if the value at index i is not equal to i, then 
+		swap(i, array[i]-1)				 //put it at index i
+}
+
+Interview Question Note: Finding a duplicate number in an array containing elements 1 to N
+
+have two indices - slow and fast.
+
+slow = n[0]
+fast = n[n[0]]
+
+while(slow != fast)
+{
+	slow = n[slow]
+	fast = n[n[fast]]
+}
+
+here slow = fast.
+fast = 0 // start from the beginning
+
+while(slow != fast)
+{
+	slow = n[slow]
+	fast = n[fast]
+}
+
+return slow
+
+Interview Question Note : Logic behind finding the cycle start point in a linked list:
+
+- - - - - - - - - -
+	m	-		  -
+		-		  -
+	  y	-         -
+		- - - - - - 
+			 k
+suppose size of path NOT  in the loop = m
+meeting point in loop = k
+path in loop after k till the start of the loop = y
+so total distance travelled by slow pointer = m + k
+total distance travelled by fast pointer = m + k + y + k = m + 2k +y #assuming only 1 loop until it meets the slow ptr
+but the fast pointer travels 2 times the distance of the slow pointer 
+so fast ptr = 2*slow ptr
+m+ 2k +y =2m +2k
+y = m
+
+So this means that the the distance from the start of the track to the start of the loop = distance from meeting point to the start of the loop
+
+Interview Question Note: Boyer - Moore Majority Vote Algorithm
+
+Finding the majority number in an array.
+
+1. O(n)
+majority = 0
+count = 0
+
+foreach i in the array
+	if count == 0
+		majority = array[i]
+	if array[i] == majority
+		count++
+	else
+		count--
+
+2. O(n)
+
+Go through the whole array and confirm that the majority variable is indeed the majority element
+
+If you do this till the end of the array and there is some majority element in the array
+then, you will have a non-zero count and corresponding majority value.
+
+If the question is to find the n/3 majority element where the element occurs n/3 times in the array,
+Maintain 2 counts and 2 majority values.
+
+Interview Question Note: Division without divide operator.
+
+denominator = x;
+numerator = y;
+quotient = 1;
+
+while(y < x)
+{
+	left shift the denominator;
+	left shift the quotient;
+}
+
+at some point, the denominator will be greater than the numerator;
+
+then we have to check for the remainder that we get numerator - denominator. example: 64/5. the remainder for first division will be 5*8 = 40 so 64 - 40
+we have to deal with the rest  = 24.
+
+result = 0; // this will hold the final answer;
+right shift denominator;
+right shift quotient; -> to acount for the overreach that happens in the previous step.
+
+while(quotient != 0)
+	if(denominator <= numerator)
+		numerator = numerator - denominator;
+		result = result | quotient;
+
+		right shift denominator;
+		right shift quotient;
+end of while
+
+return result.
+
+
+Interview Note:
+
+Finding the maximum XOR value in a range of array intergers.
+
+Consider the array limits, x and y. x and y have a certain prefix which is common to both of them
+x =1010 y = 1111, the prefix is the MSB = 1.
+
+Now, all the digits in the resulting XOR for the prefix will be 1.
+
+Next, x and y will differ in the first bit after the prefix since thats what separates them.
+
+so consider prefixbits0xxxx is x
+			prefixbits1xxxx is y
+
+For a maximum XOR value, suffix bits of x should be 11111 and y should be 00000. That will produce the max diff in bits.
+
+so answer is prefix0all1s
+			 prefix1all0s
+Not sure how to produce that.
+
+Interview Note:
+
+Given a number X find all the numbers i < X for which i + X = i XOR X
+
+a + b = 2 ( a &b) + a^b.
+
+So if a+b == a^b then a&b has to be zero. That means there should be NO common bits in the number.
+
+So, whereever the bits are set in the number a, those bits should be unset in the number b.
+
+Also, if there is a set bit in number a,  there is no option but the bit being unset in number b.
+
+If the bit is unset in number b, then those bits can be set/unset in the number b to produce a diff between a and b.
+
+So let the set bits be in a, count the number of unset bits in a. The total number of different bits in b can be 2^(num_unset_a)
+
+for ex: 12 is 1100.
+
+If the And has to be zero, b has to be 00 1/0 1/0 so two bits can be different. This will produce 4 results.
+
+So the answer is 2^(unset_bits_in_Num)
 
 
 
