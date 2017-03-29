@@ -324,6 +324,88 @@ for an odd sized array, only the even-indexed items are needed to be XOR'd.
 
 Seems more like a trick question to see if the person actually calculates all the possible sub arrays.
 
+Interview Note:
+
+Finding the AND of all numbers in a range:
+
+The bitwise AND of two numbers is 1 if and only if the numbers are both 1. So if any number if completely different in all bits, the resultant AND is 0.
+
+If in a range, the MSB of both the numbers is not the same, then the resulant AND of the numbers in the range = 0.
+
+If in a range, the MSB of both the numbers is same, then 
+
+1. resultant AND is result + the 2^(position_of_MSB)
+2. x = x - 2^(position of MSB)
+3. y = y - 2^(position_of_MSB)
+4. Redo all steps until the MSB is NOT the same.
+
+Tip: cin >> a >> b is the same as cin >> a; cin >> b; The variables should be entered separated by a space, newline or tab
+
+Interview Note:
+
+Number of ways to get from the bottom of the staircase to the n'th stair = numways(n-1) + numways(n-2) when the user can only take 1 or 2 steps at a time.
+
+Interview Note:
+
+In an array: find the maximum continguous subarray.
+
+[-2, -3, 4,-1, -2,1,5,-3] - Use Kadane's Algorithm
+
+maintain two variables
+max_so_far and max_total
+
+foreach(i in the array)
+	max_so_far = max(max_so_far+x,x);
+	max_total = max(max_so_far, max_total);
+
+Tip: Vector Initialization - vector {start of array, end of array}
+start of array = array
+end of array  = array + sizeof(array)/sizeof(array[0])
+
+Tip: std::vector is allocating and de-allocating in the background when we add more elements using push_back. 
+All these allocations are happening in the heap and not in stack.
+
+A vector<string> is better than a vector<string*> because the former will allocate in contiguous space whereas the latter will
+not guarantee contiguous allocation. This slows down accesses.
+
+Interview  Note:
+
+In a sorted linked list: reduce the list to contain only unique elements 
+
+1-2-2-2-3-4-5 should become 1-3-4-5
+
+This is solved by creating a fake head element for the list. This fake head element is used as the starting point of another list
+that contains only these unique elements. If while parsing, we find any dupes, we skip attaching those elements to this new list.
+
+fakehead = 0
+p = fakehead; //initial fakehead ptr
+while(head and head->next exist)
+	if(head and head->next are not the same)
+		then fakehead ->next = head
+			 fakehead = fakehead->next
+			 head = head->next
+	else
+		int temp = head->value
+		while(head->next and head->next->value == temp) // this loop basically skips all the elements following this element that are the same.
+			head = head->next;
+
+		fakehead->next = head;
+		return p->next // this is the next element after the initial fakehead declaration.
+
+Pro: O(n) on time and O(1) on space.
+
+Con: Memory leaks since it doesn't delete the skipped elements. Can delete them by marking them in the struct or doing another round of parsing.
+
+Tip: Dictionary is an abstract data type. It can be implemented in several ways. C++ maps are dictionaries implemented using Binary Search Trees.
+
+Interview Note:
+
+Reverse a linked list within limits. 
+
+1-2-3-4-5: reverse between 2 and 4
+
+1-4-3-2-5
+
 
 
 
