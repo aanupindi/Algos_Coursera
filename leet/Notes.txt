@@ -1,5 +1,18 @@
 Notes:
 
+Logic behind hashing:
+
+It's easy to insert and search for elements in an array if we know where to look. In the sense, what index to look at.
+So hashing is to take the value that we need to insert/search for and convert that into our index as well.
+This serves 2 purposes - We know where to insert this value AND we know where to look for it.
+The whole idea is to conver the value into the index.
+
+InsertIntoHashTable(int value)
+{
+	int index = ConvertThisValueIntoAnIndex(value); //This is the hashing function
+	
+	InsertAtIndex(index, value);
+}
 Robin Karp Algorithm is used to calculate the hash of strings to help in pattern matching and detecting duplicates.
 
 string s, string pattern.
@@ -27,6 +40,7 @@ If the macro #NDEBUG is defined, then the assert will be a NO-OP. This will be h
 
 SORTING:
 
+
 1. Selection Sort: Find the minimum element in the current array. Keep it aside and delete it in the current array. Do this until the end of current array. 
    This is at a worst case runtime of O(n^2). Another way of sorting is to do: for each element, find the minimum in the array and replace minimum with current element.
    Here the array is divided into unsorted and sorted elements. There is also no need to have an extra data structure to store the sorted elements.
@@ -48,5 +62,373 @@ parent = n/2;
 left child = 2k
 right child = 2k+1
 The positions of each element is known before hand without any need for pointers.
+
+Selection sort is basically
+for all in the array:
+	find the min of the array,
+	swap with current iterator element.
+
+This takes n^2 time since the task of finding the min element is O(n) and then this has to be done for n elements.
+
+This can be improved by using a better data structure that provides us with the minimum element faster.
+
+Heap can be used for this. HeapSort is basically Selection Sort with Heap data structure.
+
+HEAPS: efficient data structures used to obtain priority queue operations like insert, min and delete.
+The difference between  the HEAP data structure and the Binary Search Tree is that the position of the children of each doesn't have to
+be maintained using separate pointers. This pointer technique can become very cumbersome.
+Heaps are structures that represent binary trees without any pointers.
+Data is stored as an array of keys and the position of each node is implictly deduced from the index of the array.
+
+struct{
+	
+	item_type t[queue_size]; //queue with capacity queue_size
+	int n;					// number of elements in the queue.
+}heap;
+
+for any root element k,
+left child = 2k
+right child = 2k + 1
+parent of k = k/2
+
+Heaps are used mainly to maintain some sort of dominance order in the array. This could be 
+min heap - each parent node is lesser than it's children
+max heap - each parent node is greater than it's children
+
+Addition or removal of any key automatically should reorder the elements in order to retain the dominance relationship.
+The relationship could be anything apart from min and max.
+relationship = use the symbol ^
+
+HEAP INSERTION:
+
+A new key has to be added to the end of the array. 
+From this,
+ if (new_element ^ parent) swap them.
+ Do this until the new_element no longer ^ it's parent.
+
+This step takes number of elements to skip at most * time to skip each level = nlogn time complexity and constant space complexity.
+
+HEAP DELETE TOP ELEMENT:
+
+Deleting/extracting the dominant element in the heap is easy since it's the topmost element. Now, when this element is deleted, 
+there is a hole in that spot and has to be filled by another element.
+Fill the top element by bringing in the right-most element in the array.
+Now, check for dominance relationship of the top element with the top+1 and top+2 elements and bubble the element down 
+to the index where it no longer is dominated by it's child.
+
+HEAPSORT:
+
+Take in an array of items.
+Make Heap by calling the insertion technique on the array item by item. This way we can sort items based on any possible merit.
+ascending, descending, any heirarchy based on the requirement of the items present in the heap.
+
+for ex: Can create a heap based on the # of patents acquired by each person in a team. 
+
+class member
+{
+	private:
+	string name;
+	int age;
+	string position;
+	int numPatents;
+
+	public:
+	int GetPatents();
+	int SetPatent(int numPatent);
+};
+
+
+struct {
+	
+	member team[team_size];
+	int numMembers;
+
+	void make_heap(member m)
+	member removeTop();
+}patent_queue;
+
+make_heap() would look at the member.numPatents to decide what position it would add the person into the heap DS.
+removeTop() would remove the top performing person from the heap and replace with the next top performer.
+
+HeapSort is simple to program and takes nlogn for each operation. 
+It is in-place and does not need any extra space.
+Cannot go wrong with heapsort.
+
+Optimizing heap creation:
+
+Insert all the elements in an array in unsorted order.
+Starting from the end, Call bubble_down() on the array.
+This should finish the heap creation in O(nlogn) time.
+
+Quick Sort: 
+
+1. Choose a pivot( could be random best results or the last element of the array) 
+2. Now partition the array into elements less than and greater than that pivot.
+3. Now ideally we should have divided the array somewhat equally. The array has two separate and lesser sub arrays.
+4. Repeat steps 1-3 on the sub arrays.
+
+The worst case for Quick sort is quadratic. This happens if the pivot is chosen such that the array is not divided into sub arrays at all.
+At this point we are calling the quick sort which is a O(n) operation n times.
+To better this, it is important to choose a random array element since this decrease the chances of the array not being halved.
+
+Bucket Sort:
+
+This divides the array into buckets based on a certain characteristic.
+Now all the buckets are self contained unsorted arrays.
+We can recursively sort the buckets again.
+This is useful in the case where there are equal number of items in each bucket.
+
+Interview Question Note: O(n) Sorting in an array with elements b/w 1 and N when the array size is N.
+
+Basically the array contains N elements and the VALUE of those elements is also between 1 and N.
+
+So the value of the elements is contained within the indices of the array.
+
+Idea: Put the elements in the place indicated by the indices. so element 6 goes to index = 5 (since the indices are between 0 and N-1)
+
+for(i = 0 to the end of the array)
+{
+	if(array[i] != array[array[i]-1])	 //if the value at index i is not equal to i, then 
+		swap(i, array[i]-1)				 //put it at index i
+}
+
+Interview Question Note: Finding a duplicate number in an array containing elements 1 to N
+
+have two indices - slow and fast.
+
+slow = n[0]
+fast = n[n[0]]
+
+while(slow != fast)
+{
+	slow = n[slow]
+	fast = n[n[fast]]
+}
+
+here slow = fast.
+fast = 0 // start from the beginning
+
+while(slow != fast)
+{
+	slow = n[slow]
+	fast = n[fast]
+}
+
+return slow
+
+Interview Question Note : Logic behind finding the cycle start point in a linked list:
+
+- - - - - - - - - -
+	m	-		  -
+		-		  -
+	  y	-         -
+		- - - - - - 
+			 k
+suppose size of path NOT  in the loop = m
+meeting point in loop = k
+path in loop after k till the start of the loop = y
+so total distance travelled by slow pointer = m + k
+total distance travelled by fast pointer = m + k + y + k = m + 2k +y #assuming only 1 loop until it meets the slow ptr
+but the fast pointer travels 2 times the distance of the slow pointer 
+so fast ptr = 2*slow ptr
+m+ 2k +y =2m +2k
+y = m
+
+So this means that the the distance from the start of the track to the start of the loop = distance from meeting point to the start of the loop
+
+Interview Question Note: Boyer - Moore Majority Vote Algorithm
+
+Finding the majority number in an array.
+
+1. O(n)
+majority = 0
+count = 0
+
+foreach i in the array
+	if count == 0
+		majority = array[i]
+	if array[i] == majority
+		count++
+	else
+		count--
+
+2. O(n)
+
+Go through the whole array and confirm that the majority variable is indeed the majority element
+
+If you do this till the end of the array and there is some majority element in the array
+then, you will have a non-zero count and corresponding majority value.
+
+If the question is to find the n/3 majority element where the element occurs n/3 times in the array,
+Maintain 2 counts and 2 majority values.
+
+Interview Question Note: Division without divide operator.
+
+denominator = x;
+numerator = y;
+quotient = 1;
+
+while(y < x)
+{
+	left shift the denominator;
+	left shift the quotient;
+}
+
+at some point, the denominator will be greater than the numerator;
+
+then we have to check for the remainder that we get numerator - denominator. example: 64/5. the remainder for first division will be 5*8 = 40 so 64 - 40
+we have to deal with the rest  = 24.
+
+result = 0; // this will hold the final answer;
+right shift denominator;
+right shift quotient; -> to acount for the overreach that happens in the previous step.
+
+while(quotient != 0)
+	if(denominator <= numerator)
+		numerator = numerator - denominator;
+		result = result | quotient;
+
+		right shift denominator;
+		right shift quotient;
+end of while
+
+return result.
+
+
+Interview Note:
+
+Finding the maximum XOR value in a range of array intergers.
+
+Consider the array limits, x and y. x and y have a certain prefix which is common to both of them
+x =1010 y = 1111, the prefix is the MSB = 1.
+
+Now, all the digits in the resulting XOR for the prefix will be 1.
+
+Next, x and y will differ in the first bit after the prefix since thats what separates them.
+
+so consider prefixbits0xxxx is x
+			prefixbits1xxxx is y
+
+For a maximum XOR value, suffix bits of x should be 11111 and y should be 00000. That will produce the max diff in bits.
+
+so answer is prefix0all1s
+			 prefix1all0s
+Not sure how to produce that.
+
+Interview Note:
+
+Given a number X find all the numbers i < X for which i + X = i XOR X
+
+a + b = 2 ( a &b) + a^b.
+
+So if a+b == a^b then a&b has to be zero. That means there should be NO common bits in the number.
+
+So, whereever the bits are set in the number a, those bits should be unset in the number b.
+
+Also, if there is a set bit in number a,  there is no option but the bit being unset in number b.
+
+If the bit is unset in number b, then those bits can be set/unset in the number b to produce a diff between a and b.
+
+So let the set bits be in a, count the number of unset bits in a. The total number of different bits in b can be 2^(num_unset_a)
+
+for ex: 12 is 1100.
+
+If the And has to be zero, b has to be 00 1/0 1/0 so two bits can be different. This will produce 4 results.
+
+So the answer is 2^(unset_bits_in_Num)
+
+Interview Note:
+
+for a set of integers : find the XOR of all contiguous sub arrays.
+
+for an even sized array, it turns out that all the integers cancel each other.
+
+for an odd sized array, only the even-indexed items are needed to be XOR'd.
+
+Seems more like a trick question to see if the person actually calculates all the possible sub arrays.
+
+Interview Note:
+
+Finding the AND of all numbers in a range:
+
+The bitwise AND of two numbers is 1 if and only if the numbers are both 1. So if any number if completely different in all bits, the resultant AND is 0.
+
+If in a range, the MSB of both the numbers is not the same, then the resulant AND of the numbers in the range = 0.
+
+If in a range, the MSB of both the numbers is same, then 
+
+1. resultant AND is result + the 2^(position_of_MSB)
+2. x = x - 2^(position of MSB)
+3. y = y - 2^(position_of_MSB)
+4. Redo all steps until the MSB is NOT the same.
+
+Tip: cin >> a >> b is the same as cin >> a; cin >> b; The variables should be entered separated by a space, newline or tab
+
+Interview Note:
+
+Number of ways to get from the bottom of the staircase to the n'th stair = numways(n-1) + numways(n-2) when the user can only take 1 or 2 steps at a time.
+
+Interview Note:
+
+In an array: find the maximum continguous subarray.
+
+[-2, -3, 4,-1, -2,1,5,-3] - Use Kadane's Algorithm
+
+maintain two variables
+max_so_far and max_total
+
+foreach(i in the array)
+	max_so_far = max(max_so_far+x,x);
+	max_total = max(max_so_far, max_total);
+
+Tip: Vector Initialization - vector {start of array, end of array}
+start of array = array
+end of array  = array + sizeof(array)/sizeof(array[0])
+
+Tip: std::vector is allocating and de-allocating in the background when we add more elements using push_back. 
+All these allocations are happening in the heap and not in stack.
+
+A vector<string> is better than a vector<string*> because the former will allocate in contiguous space whereas the latter will
+not guarantee contiguous allocation. This slows down accesses.
+
+Interview  Note:
+
+In a sorted linked list: reduce the list to contain only unique elements 
+
+1-2-2-2-3-4-5 should become 1-3-4-5
+
+This is solved by creating a fake head element for the list. This fake head element is used as the starting point of another list
+that contains only these unique elements. If while parsing, we find any dupes, we skip attaching those elements to this new list.
+
+fakehead = 0
+p = fakehead; //initial fakehead ptr
+while(head and head->next exist)
+	if(head and head->next are not the same)
+		then fakehead ->next = head
+			 fakehead = fakehead->next
+			 head = head->next
+	else
+		int temp = head->value
+		while(head->next and head->next->value == temp) // this loop basically skips all the elements following this element that are the same.
+			head = head->next;
+
+		fakehead->next = head;
+		return p->next // this is the next element after the initial fakehead declaration.
+
+Pro: O(n) on time and O(1) on space.
+
+Con: Memory leaks since it doesn't delete the skipped elements. Can delete them by marking them in the struct or doing another round of parsing.
+
+Tip: Dictionary is an abstract data type. It can be implemented in several ways. C++ maps are dictionaries implemented using Binary Search Trees.
+
+Interview Note:
+
+Reverse a linked list within limits. 
+
+1-2-3-4-5: reverse between 2 and 4
+
+1-4-3-2-5
+
+
 
 
